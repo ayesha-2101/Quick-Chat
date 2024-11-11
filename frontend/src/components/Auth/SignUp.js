@@ -82,7 +82,7 @@ export default function SignUp() {
         },
       };
       const { data } = await axios.post(
-        "http://localhost:5080/api/user/register",
+        "/api/user/register",
         { name: Name, email: Email, password: Password, pic: pic },
         config
       );

@@ -37,7 +37,7 @@ export default function Login() {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5080/api/user/login",
+        "/api/user/login",
         { email: email, password: password },
         config
       );

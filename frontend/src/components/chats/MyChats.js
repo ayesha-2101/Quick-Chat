@@ -4,12 +4,13 @@ import { Box, Button, useToast } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import ChatLoading from "./ChatLoading";
-import { Stack ,Text} from "@chakra-ui/react";
+import { Stack, Text } from "@chakra-ui/react";
 import { getSender } from "../../config/chatLogic";
 import CommunityChatModal from "./CommunityChatModal";
 export default function MyChats(props) {
   const [loggedUser, setLoggedUser] = useState("");
-  const { user, setUser, selectedChat, setSelectedChat, chats, setChats } =ChatState();
+  const { user, setUser, selectedChat, setSelectedChat, chats, setChats } =
+    ChatState();
   const toast = useToast();
   const fetchChats = async () => {
     try {
@@ -18,7 +19,7 @@ export default function MyChats(props) {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get("http://localhost:5080/api/chat", config);
+      const { data } = await axios.get("/api/chat", config);
       setChats(data);
     } catch (error) {
       toast({
@@ -58,42 +59,40 @@ export default function MyChats(props) {
       >
         My Communities
         <CommunityChatModal>
-        <Button
-          display="flex"
-          fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-          rightIcon={<AddIcon />}
-        >
-          New Community Chat
-        </Button>
+          <Button
+            display="flex"
+            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+            rightIcon={<AddIcon />}
+          >
+            New Community Chat
+          </Button>
         </CommunityChatModal>
       </Box>
-    
-      {
-        chats?(
-          chats.map(function(chat){
-            return(
-              <Box
-                onClick={() => setSelectedChat(chat)}
-                cursor="pointer"
-                bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
-                color={selectedChat === chat ? "white" : "#001C30"}
-                px={3}
-                py={2}
-                mb={1}
-                w="100%" 
-                borderRadius="lg"
-                key={chat._id} >
-                <Text>
-                {chat.isCommunity?(chat.chatName):(getSender(loggedUser,chat))}
-                  
-                </Text></Box>
-            )
-          })
-          
-        ):(
-          <ChatLoading/>
-        )
-      }
+
+      {chats ? (
+        chats.map(function (chat) {
+          return (
+            <Box
+              onClick={() => setSelectedChat(chat)}
+              cursor="pointer"
+              bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
+              color={selectedChat === chat ? "white" : "#001C30"}
+              px={3}
+              py={2}
+              mb={1}
+              w="100%"
+              borderRadius="lg"
+              key={chat._id}
+            >
+              <Text>
+                {chat.isCommunity ? chat.chatName : getSender(loggedUser, chat)}
+              </Text>
+            </Box>
+          );
+        })
+      ) : (
+        <ChatLoading />
+      )}
     </Box>
   );
 }

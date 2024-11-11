@@ -40,7 +40,7 @@ function CommunityChatModal({ children }) {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`http://localhost:5080/api/user?search=${search}`, config);
+      const { data } = await axios.get(`/api/user?search=${search}`, config);
       console.log(data);
       setLoading(false);
       setSearchResult(data);
@@ -54,8 +54,8 @@ function CommunityChatModal({ children }) {
       });
     }
   };
-  const handelSubmit =async () => {
-    if(!communityChatName || !selectedUsers){
+  const handelSubmit = async () => {
+    if (!communityChatName || !selectedUsers) {
       toast({
         title: "please fill the field",
         status: "warning",
@@ -63,7 +63,7 @@ function CommunityChatModal({ children }) {
         isClosable: true,
         position: "top-left",
       });
-      return ;
+      return;
     }
     try {
       const config = {
@@ -71,11 +71,15 @@ function CommunityChatModal({ children }) {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const {data}=await axios.post('http://localhost:5080/api/chat/community',{
-        name:communityChatName,
-        users:JSON.stringify(selectedUsers.map((u)=>u._id))
-      },config);
-      setChats([data,...chats]);
+      const { data } = await axios.post(
+        "/api/chat/community",
+        {
+          name: communityChatName,
+          users: JSON.stringify(selectedUsers.map((u) => u._id)),
+        },
+        config
+      );
+      setChats([data, ...chats]);
       onClose();
       toast({
         title: "new community chat created",
@@ -94,9 +98,9 @@ function CommunityChatModal({ children }) {
       });
     }
   };
-  const handelCommunity=(userToAdd)=>{
-      if(selectedUsers.includes(userToAdd)){
-        toast({
+  const handelCommunity = (userToAdd) => {
+    if (selectedUsers.includes(userToAdd)) {
+      toast({
         title: "Already Selected",
         status: "warning",
         duration: 5000,
@@ -104,13 +108,14 @@ function CommunityChatModal({ children }) {
         position: "top-left",
       });
       return;
-      }
-      setSelectedUsers([...selectedUsers,userToAdd]);
-
+    }
+    setSelectedUsers([...selectedUsers, userToAdd]);
   };
-  const handelDelete=(userToDelete)=>{
-     setSelectedUsers(selectedUsers.filter(sel=>sel._id !=userToDelete._id))
-  }
+  const handelDelete = (userToDelete) => {
+    setSelectedUsers(
+      selectedUsers.filter((sel) => sel._id != userToDelete._id)
+    );
+  };
   return (
     <>
       <span onClick={onOpen}>{children}</span>
@@ -155,18 +160,28 @@ function CommunityChatModal({ children }) {
             />
           </FormControl>
           <Box w="100%" display="flex" flexWrap="wrap">
-          {selectedUsers.map(function(user){
-            return (
-              <UserBadgeItem key={user._id} data={user} handelFunction={()=>handelDelete(user)} />
-            )
-          })}
+            {selectedUsers.map(function (user) {
+              return (
+                <UserBadgeItem
+                  key={user._id}
+                  data={user}
+                  handelFunction={() => handelDelete(user)}
+                />
+              );
+            })}
           </Box>
           {loading ? (
             <div>loading</div>
           ) : searchResult ? (
-            searchResult.slice(0,3).map(function (user) {
+            searchResult.slice(0, 3).map(function (user) {
               return (
-                <UserListItem key={user._id} data={user} handelFunction={()=>{handelCommunity(user)}}/>
+                <UserListItem
+                  key={user._id}
+                  data={user}
+                  handelFunction={() => {
+                    handelCommunity(user);
+                  }}
+                />
               );
             })
           ) : (

@@ -28,7 +28,14 @@ import ChatLoading from "./ChatLoading";
 import UserListItem from "./UserListItem";
 import axios from "axios";
 function Slide() {
-  const { user, setSelectedChat, chats, setChats,notifications,setNotifications } = ChatState();
+  const {
+    user,
+    setSelectedChat,
+    chats,
+    setChats,
+    notifications,
+    setNotifications,
+  } = ChatState();
   // console.log(user.token);
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -58,18 +65,19 @@ function Slide() {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`http://localhost:5080/api/user?search=${search}`, config);
+      const { data } = await axios.get(`/api/user?search=${search}`, config);
       console.log("****");
       console.log(data);
       console.log("****");
-      if(searchResult.includes(data)){
+      if (searchResult.includes(data)) {
         toast({
-        title: "Already Selected",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top-left",
-      });}
+          title: "Already Selected",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "top-left",
+        });
+      }
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -92,7 +100,7 @@ function Slide() {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post("http://localhost:5080/api/chat/", { Id }, config);
+      const { data } = await axios.post("/api/chat/", { Id }, config);
       console.log(data);
       if (chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
       setSelectedChat(data);
@@ -130,7 +138,7 @@ function Slide() {
           </Button>
         </Tooltip>
         <Text fontSize="2xl" fontFamily="Work sans">
-          Mercari: Your Marketplace 
+          Mercari: Your Marketplace
         </Text>
         <div style={{ display: "flex" }}>
           <Menu>
@@ -139,11 +147,13 @@ function Slide() {
             </MenuButton>
             <MenuList pl={3}>
               {!notifications.length && "No new messages"}
-              
-              {notifications.map(notif => {
+
+              {notifications.map((notif) => {
                 <MenuItem key={notif._id}>
-                  {notif.chat.isCommunity ? `Message from ${notif.chat.chatName}` : `Message from ${getSender(user,notif.chat)} }`}
-                </MenuItem>
+                  {notif.chat.isCommunity
+                    ? `Message from ${notif.chat.chatName}`
+                    : `Message from ${getSender(user, notif.chat)} }`}
+                </MenuItem>;
               })}
             </MenuList>
           </Menu>

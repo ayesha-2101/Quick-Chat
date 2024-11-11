@@ -33,7 +33,10 @@ function UpdateCommunity(props) {
   const toast = useToast();
   const handelRemove = async (user1) => {
     console.log(user1);
-    if (selectedChat.gpAdmin.email !== user.email && user1.email !== user.email) {
+    if (
+      selectedChat.gpAdmin.email !== user.email &&
+      user1.email !== user.email
+    ) {
       toast({
         title: "only admins can remove",
         status: "warning",
@@ -41,7 +44,7 @@ function UpdateCommunity(props) {
         isClosable: true,
         position: "top-left",
       });
-      return ;
+      return;
     }
     // console.log("hello");
     try {
@@ -51,16 +54,19 @@ function UpdateCommunity(props) {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const {data}=await axios.put('http://localhost:5080/api/chat/gpRemove',{
-        chatId:selectedChat._id,
-        userId:user1._id
-      },config);
+      const { data } = await axios.put(
+        "/api/chat/gpRemove",
+        {
+          chatId: selectedChat._id,
+          userId: user1._id,
+        },
+        config
+      );
       // console.log(data);
-      user1.email===user.email ?setSelectedChat():setSelectedChat(data);
+      user1.email === user.email ? setSelectedChat() : setSelectedChat(data);
       props.setFetchAgain(!props.fetchAgain);
       props.fetchChats();
       setLoading(false);
-
     } catch (error) {
       toast({
         title: "oerror occured",
@@ -71,7 +77,6 @@ function UpdateCommunity(props) {
       });
       setLoading(false);
     }
-
   };
   const handelRename = async () => {
     if (!communityChatName) return;
@@ -83,7 +88,7 @@ function UpdateCommunity(props) {
         },
       };
       const { data } = await axios.put(
-        "http://localhost:5080/api/chat/rename",
+        "/api/chat/rename",
         {
           chatId: selectedChat._id,
           chatName: communityChatName,
@@ -117,7 +122,7 @@ function UpdateCommunity(props) {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`http://localhost:5080/api/user?search=${search}`, config);
+      const { data } = await axios.get(`/api/user?search=${search}`, config);
       // console.log(data);
       setLoading(false);
       setSearchResult(data);
@@ -163,7 +168,7 @@ function UpdateCommunity(props) {
         },
       };
       const { data } = await axios.put(
-        `http://localhost:5080/api/chat/gpAdd`,
+        `/api/chat/gpAdd`,
         {
           chatId: selectedChat._id,
           userId: user1._id,
@@ -206,7 +211,9 @@ function UpdateCommunity(props) {
           <ModalBody>
             <Box width="100%" display="flex" flexWrap="wrap" pb={3}>
               {selectedChat.users.map(function (x) {
-                {/* console.log(x); */}
+                {
+                  /* console.log(x); */
+                }
 
                 return (
                   <UserBadgeItem
@@ -263,7 +270,13 @@ function UpdateCommunity(props) {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={()=>{handelRemove(user)}}>
+            <Button
+              colorScheme="red"
+              mr={3}
+              onClick={() => {
+                handelRemove(user);
+              }}
+            >
               Leave Community
             </Button>
           </ModalFooter>
